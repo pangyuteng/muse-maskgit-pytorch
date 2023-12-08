@@ -1,6 +1,6 @@
 
 universe = docker
-docker_image = pangyuteng/muse-maskgit-pytorch:latest
+docker_image = docker.io/pangyuteng/muse-maskgit-pytorch
 docker_pull_policy = always
 
 executable = run.sh
