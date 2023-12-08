@@ -120,7 +120,7 @@ class ImageDataset(Dataset):
             img = Image.open(path)
         else:
             img = cv2.imread(path, -1)  # -1 is needed for 16-bit image
-            img = (im.astype(np.int32) - 32768).astype(np.int16) # HU
+            img = (img.astype(np.int32) - 32768).astype(np.int16) # HU
             img = ((img + 1024)/(1024 + 3071))*255
         return self.transform(img)
 
