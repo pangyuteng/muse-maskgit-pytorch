@@ -1,0 +1,14 @@
+accelerate
+beartype
+einops>=0.7
+ema-pytorch>=0.2.2
+memory-efficient-attention-pytorch>=0.1.4
+pillow
+sentencepiece
+torch>=1.6
+transformers
+torch>=1.6
+torchvision
+tqdm
+vector-quantize-pytorch>=1.11.8
+pandas

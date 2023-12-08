@@ -87,12 +87,16 @@ class ImageDataset(Dataset):
         self,
         folder,
         image_size,
+        file_list=None,
         exts = ['jpg', 'jpeg', 'png']
     ):
         super().__init__()
         self.folder = folder
         self.image_size = image_size
-        self.paths = [p for ext in exts for p in Path(f'{folder}').glob(f'**/*.{ext}')]
+        if folder is not None:
+            self.paths = [p for ext in exts for p in Path(f'{folder}').glob(f'**/*.{ext}')]
+        if file_list is not None:
+            self.paths = file_list
 
         print(f'{len(self.paths)} training samples found at {folder}')
 
@@ -120,10 +124,11 @@ class VQGanVAETrainer(nn.Module):
         self,
         vae: VQGanVAE,
         *,
-        folder,
         num_train_steps,
         batch_size,
         image_size,
+        folder=None,
+        file_list=None,
         lr = 3e-4,
         grad_accum_every = 1,
         max_grad_norm = None,
@@ -185,8 +190,11 @@ class VQGanVAETrainer(nn.Module):
         self.discr_max_grad_norm = discr_max_grad_norm
 
         # create dataset
-
-        self.ds = ImageDataset(folder, image_size)
+        if folder is not None:
+            self.ds = ImageDataset(folder, image_size)
+        if file_list is not None:
+            self.ds = ImageDataset(None, image_size,file_list=file_list)
+        
 
         # split for validation
 
