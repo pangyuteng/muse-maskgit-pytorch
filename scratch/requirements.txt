@@ -12,3 +12,4 @@ torchvision
 tqdm
 vector-quantize-pytorch>=1.11.8
 pandas
+opencv_python

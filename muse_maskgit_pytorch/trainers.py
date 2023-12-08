@@ -26,6 +26,8 @@ from ema_pytorch import EMA
 from PIL import Image, ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
+import cv2
+
 # helper functions
 
 def exists(val):
@@ -95,9 +97,10 @@ class ImageDataset(Dataset):
         self.image_size = image_size
         if folder is not None:
             self.paths = [p for ext in exts for p in Path(f'{folder}').glob(f'**/*.{ext}')]
+            self.rescale_png = False
         if file_list is not None:
             self.paths = file_list
-
+            self.rescale_png = True
         print(f'{len(self.paths)} training samples found at {folder}')
 
         self.transform = T.Compose([
@@ -113,7 +116,12 @@ class ImageDataset(Dataset):
 
     def __getitem__(self, index):
         path = self.paths[index]
-        img = Image.open(path)
+        if not self.rescale_png:
+            img = Image.open(path)
+        else:
+            img = cv2.imread(path, -1)  # -1 is needed for 16-bit image
+            img = (im.astype(np.int32) - 32768).astype(np.int16) # HU
+            img = ((img + 1024)/(1024 + 3071))*255
         return self.transform(img)
 
 # main trainer class
