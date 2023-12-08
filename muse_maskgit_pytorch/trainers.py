@@ -120,9 +120,10 @@ class ImageDataset(Dataset):
         if not self.rescale_png:
             img = Image.open(path)
         else:
-            img = cv2.imread(path, -1)  # -1 is needed for 16-bit image
-            img = (img.astype(np.int32) - 32768).astype(np.int16) # HU
-            img = ((img + 1024)/(1024 + 3071))*255
+            arr = cv2.imread(path, -1)  # -1 is needed for 16-bit image
+            arr = (arr.astype(np.int32) - 32768).astype(np.int16) # HU
+            arr = ((arr + 1024)/(1024 + 3071))*255
+            img = Image.fromarray(arr)
         return self.transform(img)
 
 # main trainer class
